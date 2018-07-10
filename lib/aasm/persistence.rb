@@ -26,6 +26,9 @@ module AASM
           include_persistence base, :redis
         elsif hierarchy.include?("CDQManagedObject")
           include_persistence base, :core_data_query
+        elsif hierarchy.include?("Model")
+          require_persistence :netlify_model
+          include_persistence base, :netlify_model
         else
           include_persistence base, :plain
         end

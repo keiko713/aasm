@@ -18,7 +18,8 @@ exclude_files = [
   'aasm/persistence/mongoid_persistence.rb',
   'aasm/persistence/no_brainer_persistence.rb',
   'aasm/persistence/sequel_persistence.rb',
-  'aasm/persistence/redis_persistence.rb'
+  'aasm/persistence/redis_persistence.rb',
+  'aasm/persistence/netlify_model_persistence.rb'
 ]
 
 Motion::Project::App.setup do |app|
