@@ -31,18 +31,8 @@ module AASM
         base.send(:include, AASM::Persistence::Base)
         base.send(:include, AASM::Persistence::ORM)
         base.send(:include, AASM::Persistence::NetlifyModelPersistence::InstanceMethods)
-        base.extend AASM::Persistence::NetlifyModelPersistence::ClassMethods
 
         base.before_validation :aasm_ensure_initial_state
-      end
-
-      module ClassMethods
-        def aasm_create_scope(state_machine_name, scope_name)
-          scope_options = lambda {
-            where(aasm(state_machine_name).attribute_name.to_sym => scope_name.to_s)
-          }
-          send(:scope, scope_name, scope_options)
-        end
       end
 
       module InstanceMethods
