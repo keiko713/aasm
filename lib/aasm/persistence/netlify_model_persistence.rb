@@ -33,7 +33,7 @@ module AASM
         base.send(:include, AASM::Persistence::NetlifyModelPersistence::InstanceMethods)
         base.extend AASM::Persistence::NetlifyModelPersistence::ClassMethods
 
-        base.after_initialize :aasm_ensure_initial_state
+        base.before_validation :aasm_ensure_initial_state
       end
 
       module ClassMethods
