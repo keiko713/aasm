@@ -33,6 +33,24 @@ module AASM
         base.send(:include, AASM::Persistence::NetlifyModelPersistence::InstanceMethods)
 
         base.before_validation :aasm_ensure_initial_state
+
+        # Similar workaround as Dynamoid, to avoid calling a superclass of
+        # `aasm_state=` method (which is not defined in Netlify Model class so
+        # it'll raise the NoMethod error).
+        #
+        # In AASM::Base.initialize, it redefines and calls super in this method
+        # without superclass method.
+        # We override method_missing to solve this problem.
+        base.class_eval %Q(
+          def method_missing(method_name, *arguments, &block)
+            if (AASM::StateMachineStore.fetch(self.class, true).machine_names.map { |state_machine_name| self.class.aasm(state_machine_name).attribute_name.to_s + "=" }).include? method_name.to_s
+              attribute_name = method_name.to_s.gsub("=", '')
+              attributes[attribute_name] = arguments.first
+            else
+              super
+            end
+          end
+        )
       end
 
       module InstanceMethods
